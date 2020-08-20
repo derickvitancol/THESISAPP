@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -14,8 +13,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.IO.Ports;
-using System.Threading;
-using System.Windows.Threading;
+
+
 namespace THESISAPP
 {
     /// <summary>
@@ -34,6 +33,8 @@ namespace THESISAPP
             readStop = false;
             receivedStr = new ObservableCollection<string>();
             this.lbox.ItemsSource = receivedStr;
+            arduinoDevice = new SerialPort();
+
         }
 
         //FUNCTION TO GET THE COM PORTS CURRENTLY CONNECTED
@@ -53,7 +54,7 @@ namespace THESISAPP
         //FUNCTION TO REFRESH THE COM PORTS CONNECTED
         private void ButtonRefresh_Click(object sender, RoutedEventArgs e)
         {
-            
+            this.comboPortName.ItemsSource = getPorts();
         }
 
         //FUNCTION TO START THE 
@@ -70,7 +71,7 @@ namespace THESISAPP
              arduinoDevice.Open();
             MessageBox.Show(arduinoDevice.PortName + "is open!","Serial Port Opened",MessageBoxButton.OK);
             this.buttonStartReceive.IsEnabled = false;
-
+            this.comboPortName.IsEnabled = false;
         }
 
         private void listentoSerial(object sender, SerialDataReceivedEventArgs e)
@@ -85,13 +86,30 @@ namespace THESISAPP
                 receivedStr.Add(str);
             }));
 
-
-
         }
 
         private void ComboPortName_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             
+        }
+
+        private void ButtonStopReceive_Click(object sender, RoutedEventArgs e)
+        {
+            if (arduinoDevice.IsOpen)
+            {
+                arduinoDevice.DiscardInBuffer();
+                arduinoDevice.DiscardOutBuffer();
+
+                arduinoDevice.Close();
+                GC.Collect();
+                MessageBox.Show("The port is closed!", "Port closed", MessageBoxButton.OK, MessageBoxImage.Information);
+                this.buttonStartReceive.IsEnabled = true;
+                this.comboPortName.IsEnabled = true;
+            }
+            else
+            {
+                MessageBox.Show("The port is closed!", "Port closed", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
         }
     }
 

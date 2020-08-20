@@ -10,15 +10,15 @@
         <ComboBox x:Name="comboPortName" HorizontalAlignment="Left" Margin="123,10,0,0" VerticalAlignment="Top" Width="120" MouseDoubleClick="ComboPortName_MouseDoubleClick"/>
         <Label Content="Available Ports:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
         <TextBox x:Name="textboxReceived" HorizontalAlignment="Left" Height="27" Margin="125,171,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="294"/>
-        <Label Content="Date And Time: " HorizontalAlignment="Left" Margin="10,71,0,0" VerticalAlignment="Top" Width="108"/>
+        <Label Content="Date And Time: " HorizontalAlignment="Left" Margin="10,133,0,0" VerticalAlignment="Top" Width="108"/>
         <Button x:Name="buttonStartReceive" Content="Start Receiving" HorizontalAlignment="Left" Margin="125,353,0,0" VerticalAlignment="Top" Width="93" Height="38" Click="ButtonStartReceive_Click"/>
-        <Button x:Name="buttonStopReceive" Content="Stop Receiving" HorizontalAlignment="Left" Margin="247,353,0,0" VerticalAlignment="Top" Width="75" Height="38"/>
+        <Button x:Name="buttonStopReceive" Content="Stop Receiving" HorizontalAlignment="Left" Margin="247,353,0,0" VerticalAlignment="Top" Width="91" Height="38" Click="ButtonStopReceive_Click"/>
         <Button x:Name="buttonRefresh" Content="Refresh" HorizontalAlignment="Left" Margin="284,13,0,0" VerticalAlignment="Top" Width="75" Click="ButtonRefresh_Click"/>
         <ListBox x:Name="lbox" HorizontalAlignment="Left" Height="220" Margin="434,171,0,0" VerticalAlignment="Top" Width="334" RenderTransformOrigin="0.479,0.302"/>
         <TextBox HorizontalAlignment="Left" Height="23" Margin="142,218,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="66"/>
         <TextBox HorizontalAlignment="Left" Height="23" Margin="125,266,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="294"/>
-        <TextBox HorizontalAlignment="Left" Height="23" Margin="123,71,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
-        <TextBox HorizontalAlignment="Left" Height="23" Margin="284,71,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <TextBox HorizontalAlignment="Left" Height="23" Margin="123,133,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <TextBox HorizontalAlignment="Left" Height="23" Margin="284,133,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
         <Label Content="Slope Movement" HorizontalAlignment="Left" Margin="10,171,0,0" VerticalAlignment="Top" Width="108"/>
         <Label Content="Soil Moisture" HorizontalAlignment="Left" Margin="10,215,0,0" VerticalAlignment="Top" Width="108"/>
         <Label Content="S1" HorizontalAlignment="Left" Margin="114,215,0,0" VerticalAlignment="Top"/>
@@ -27,6 +27,7 @@
         <TextBox HorizontalAlignment="Left" Height="23" Margin="258,219,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="64"/>
         <TextBox HorizontalAlignment="Left" Height="23" Margin="364,219,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="55"/>
         <Label Content="RainFall" HorizontalAlignment="Left" Margin="10,262,0,0" VerticalAlignment="Top" Width="108"/>
+        <Label Content="Latest Transmission Data" HorizontalAlignment="Left" Margin="10,88,0,0" VerticalAlignment="Top" Width="233"/>
 
     </Grid>
 </Window>
