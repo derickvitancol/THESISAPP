@@ -23,7 +23,9 @@ namespace THESISAPP
     public partial class MainWindow : Window
     {
         private bool readStop;
-        ObservableCollection<string> receivedStr;
+        private ObservableCollection<string> receivedStr;
+        private string latestString;
+        private string filteredString;
         SerialPort arduinoDevice;
         public MainWindow()
         {
@@ -67,23 +69,53 @@ namespace THESISAPP
             arduinoDevice.DataReceived += listentoSerial;
 
 
-
-             arduinoDevice.Open();
-            MessageBox.Show(arduinoDevice.PortName + "is open!","Serial Port Opened",MessageBoxButton.OK);
-            this.buttonStartReceive.IsEnabled = false;
-            this.comboPortName.IsEnabled = false;
+            
+            arduinoDevice.Open();
+            if (arduinoDevice.IsOpen)
+            {
+                MessageBox.Show(arduinoDevice.PortName + "is open!", "Serial Port Opened", MessageBoxButton.OK,MessageBoxImage.Information);
+                this.buttonStartReceive.IsEnabled = false;
+                this.comboPortName.IsEnabled = false;
+            }
+            else
+            {
+                MessageBox.Show(arduinoDevice.PortName + " Failed to open!", "Failed to open", MessageBoxButton.OK,MessageBoxImage.Error);
+            }
+                
+            
         }
 
         private void listentoSerial(object sender, SerialDataReceivedEventArgs e)
         {
             var serialP = sender as SerialPort;
-            
+            string[] dataArray;
+            string[] moistureArray;
 
             Application.Current.Dispatcher.Invoke(new Action(() => {
-                string str = serialP.ReadLine();
-                this.textboxReceived.Text = str;
+                latestString = serialP.ReadLine();
+                //this.textboxReceived.Text = latestString;
 
-                receivedStr.Add(str);
+                
+                if(latestString.Length > 30)
+                {
+                    receivedStr.Add(latestString);
+                    filteredString = latestString.Substring(latestString.IndexOf('*')+1, latestString.LastIndexOf('*') - latestString.IndexOf('*')-1);
+                    //PACKETNUMBER;DATE;TIME;SOILMOVEMENT;MOISTURE1,MOISTURE2,MOISTURE3;RAIN;
+                    this.textboxRainfall.Text = filteredString;
+                    dataArray = filteredString.Split(';');
+                    moistureArray = dataArray[4].Split(',');
+
+                    this.textboxDate.Text = dataArray[1];
+                    this.textboxTime.Text = dataArray[2];
+                    this.textboxMovement.Text = dataArray[3];
+                    this.textboxS1.Text = moistureArray[0];
+                    this.textboxS2.Text = moistureArray[1];
+                    this.textboxS3.Text = moistureArray[2];
+                    this.textboxRainfall.Text=dataArray[5];
+                }
+                
+                
+
             }));
 
         }
