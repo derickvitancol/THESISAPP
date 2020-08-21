@@ -13,30 +13,56 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.IO.Ports;
+using System.Data;
 
 
 namespace THESISAPP
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
+    /// //CREATE FUNCTION FOR DATABASE COMMUNICATIONS
+    /// CREATE FUNCTION FOR DATA ANALYSIS
+    /// 7.5mm/hr danger
+    /// soil moist 50?
+    /// extenso movement > 15cm
     /// </summary>
     public partial class MainWindow : Window
     {
-        private bool readStop;
-        private ObservableCollection<string> receivedStr;
-        private string latestString;
+        
+        private ObservableCollection<transmission> receivedStr; 
         private string filteredString;
         SerialPort arduinoDevice;
+        private DataTable transmitTable;
         public MainWindow()
         {
             InitializeComponent();
 
             this.comboPortName.ItemsSource = getPorts();
-            readStop = false;
-            receivedStr = new ObservableCollection<string>();
-            this.lbox.ItemsSource = receivedStr;
-            arduinoDevice = new SerialPort();
+            receivedStr = new ObservableCollection<transmission>();
 
+            this.gridTransmit.ItemsSource = receivedStr;
+            arduinoDevice = new SerialPort();
+            transmitTable = new DataTable();
+
+        }
+
+        class transmission
+        {
+            DateTime receiveTime;
+            string receiveContent;
+
+            public DateTime timeReceived
+            {
+                get { return receiveTime; }
+                set { receiveTime = value; }
+            }
+
+            public string content
+            {
+                get { return receiveContent; }
+                set { receiveContent = value; }
+            }
+            
         }
 
         //FUNCTION TO GET THE COM PORTS CURRENTLY CONNECTED
@@ -59,7 +85,7 @@ namespace THESISAPP
             this.comboPortName.ItemsSource = getPorts();
         }
 
-        //FUNCTION TO START THE 
+        //FUNCTION TO START THE RECEIVING OF PACKETS
         private void ButtonStartReceive_Click(object sender, RoutedEventArgs e)
         {
 
@@ -84,22 +110,25 @@ namespace THESISAPP
                 
             
         }
-
+        //FUNCTION THAT LISTENS TO THE SERIAL PORT
         private void listentoSerial(object sender, SerialDataReceivedEventArgs e)
         {
             var serialP = sender as SerialPort;
             string[] dataArray;
             string[] moistureArray;
-
+            transmission latesttrans = new transmission();
+                
             Application.Current.Dispatcher.Invoke(new Action(() => {
-                latestString = serialP.ReadLine();
+                latesttrans.content = serialP.ReadLine();
+                latesttrans.timeReceived = DateTime.Now;
                 //this.textboxReceived.Text = latestString;
 
                 
-                if(latestString.Length > 30)
+                if(latesttrans.content.Length > 30)
                 {
-                    receivedStr.Add(latestString);
-                    filteredString = latestString.Substring(latestString.IndexOf('*')+1, latestString.LastIndexOf('*') - latestString.IndexOf('*')-1);
+                    receivedStr.Add(latesttrans);
+                    filteredString = latesttrans.content.Substring(latesttrans.content.IndexOf('*')+1, latesttrans.content.LastIndexOf('*') - latesttrans.content.IndexOf('*')-1);
+                    
                     //PACKETNUMBER;DATE;TIME;SOILMOVEMENT;MOISTURE1,MOISTURE2,MOISTURE3;RAIN;
                     this.textboxRainfall.Text = filteredString;
                     dataArray = filteredString.Split(';');
