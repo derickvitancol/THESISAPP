@@ -28,8 +28,8 @@ namespace THESISAPP
     /// </summary>
     public partial class MainWindow : Window
     {
-        
-        private ObservableCollection<transmission> receivedStr; 
+
+        private ObservableCollection<transmission> receivedStr;
         private string filteredString;
         SerialPort arduinoDevice;
         private DataTable transmitTable;
@@ -41,28 +41,10 @@ namespace THESISAPP
             receivedStr = new ObservableCollection<transmission>();
 
             this.gridTransmit.ItemsSource = receivedStr;
+            
             arduinoDevice = new SerialPort();
             transmitTable = new DataTable();
 
-        }
-
-        class transmission
-        {
-            DateTime receiveTime;
-            string receiveContent;
-
-            public DateTime timeReceived
-            {
-                get { return receiveTime; }
-                set { receiveTime = value; }
-            }
-
-            public string content
-            {
-                get { return receiveContent; }
-                set { receiveContent = value; }
-            }
-            
         }
 
         //FUNCTION TO GET THE COM PORTS CURRENTLY CONNECTED
@@ -72,7 +54,7 @@ namespace THESISAPP
 
             string[] pNames = SerialPort.GetPortNames();
 
-            foreach(string str in pNames )
+            foreach (string str in pNames)
             {
                 portsConnected.Add(str);
             }
@@ -95,20 +77,20 @@ namespace THESISAPP
             arduinoDevice.DataReceived += listentoSerial;
 
 
-            
+
             arduinoDevice.Open();
             if (arduinoDevice.IsOpen)
             {
-                MessageBox.Show(arduinoDevice.PortName + "is open!", "Serial Port Opened", MessageBoxButton.OK,MessageBoxImage.Information);
+                MessageBox.Show(arduinoDevice.PortName + "is open!", "Serial Port Opened", MessageBoxButton.OK, MessageBoxImage.Information);
                 this.buttonStartReceive.IsEnabled = false;
                 this.comboPortName.IsEnabled = false;
             }
             else
             {
-                MessageBox.Show(arduinoDevice.PortName + " Failed to open!", "Failed to open", MessageBoxButton.OK,MessageBoxImage.Error);
+                MessageBox.Show(arduinoDevice.PortName + " Failed to open!", "Failed to open", MessageBoxButton.OK, MessageBoxImage.Error);
             }
-                
-            
+
+
         }
         //FUNCTION THAT LISTENS TO THE SERIAL PORT
         private void listentoSerial(object sender, SerialDataReceivedEventArgs e)
@@ -117,18 +99,20 @@ namespace THESISAPP
             string[] dataArray;
             string[] moistureArray;
             transmission latesttrans = new transmission();
-                
+
             Application.Current.Dispatcher.Invoke(new Action(() => {
                 latesttrans.content = serialP.ReadLine();
                 latesttrans.timeReceived = DateTime.Now;
-                //this.textboxReceived.Text = latestString;
+                //THIS CODE RUNS IN A DIFFERENT THREAD
 
-                
-                if(latesttrans.content.Length > 30)
+
+                if (latesttrans.content.Length > 30)
                 {
                     receivedStr.Add(latesttrans);
-                    filteredString = latesttrans.content.Substring(latesttrans.content.IndexOf('*')+1, latesttrans.content.LastIndexOf('*') - latesttrans.content.IndexOf('*')-1);
-                    
+                    this.gridTransmit.Columns[0].Header = "Time Received";
+                    this.gridTransmit.Columns[1].Header = "Content of message";
+                    filteredString = latesttrans.content.Substring(latesttrans.content.IndexOf('*') + 1, latesttrans.content.LastIndexOf('*') - latesttrans.content.IndexOf('*') - 1);
+
                     //PACKETNUMBER;DATE;TIME;SOILMOVEMENT;MOISTURE1,MOISTURE2,MOISTURE3;RAIN;
                     this.textboxRainfall.Text = filteredString;
                     dataArray = filteredString.Split(';');
@@ -140,10 +124,21 @@ namespace THESISAPP
                     this.textboxS1.Text = moistureArray[0];
                     this.textboxS2.Text = moistureArray[1];
                     this.textboxS3.Text = moistureArray[2];
-                    this.textboxRainfall.Text=dataArray[5];
+                    this.textboxRainfall.Text = dataArray[5];
+                    //SEND TO DB HERE
+                    SenderData senderData = new SenderData();
+                    senderData.sentDate = Convert.ToDateTime(dataArray[1]);
+                    senderData.sentTime = Convert.ToDateTime(dataArray[2]);
+                    senderData.packetNumber = Convert.ToInt16(dataArray[0]);
+                    senderData.extensometer = Convert.ToInt16(dataArray[3]);
+                    senderData.sensor1 = Convert.ToDouble(moistureArray[0]);
+                    senderData.sensor2 = Convert.ToDouble(moistureArray[1]);
+                    senderData.sensor3 = Convert.ToDouble(moistureArray[2]);
+                    senderData.rainsensor = Convert.ToDouble(dataArray[5]);
+
+                    Database.EnterData(senderData, latesttrans.timeReceived);
+
                 }
-                
-                
 
             }));
 
@@ -151,7 +146,7 @@ namespace THESISAPP
 
         private void ComboPortName_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            
+
         }
 
         private void ButtonStopReceive_Click(object sender, RoutedEventArgs e)
@@ -173,8 +168,51 @@ namespace THESISAPP
             }
         }
     }
+    //CLASS USED FOR TRANSMISSION OF DATA 
+    public class transmission
+    {
+        DateTime receiveTime;
+        string receiveContent;
+
+        
 
 
+        public DateTime timeReceived
+        {
+            get { return receiveTime; }
+            set { receiveTime = value; }
+        }
 
-    
+        public string content
+        {
+            get { return receiveContent; }
+            set { receiveContent = value; }
+        }
+
+       
+
+    }
+
+    public class SenderData
+    {
+        DateTime dateSent;
+        DateTime timeSent;
+
+        int packetNum;
+        int soilMove;
+
+        double s1; double s2; double s3;
+        double rain;
+
+        public DateTime sentDate { get { return dateSent; } set { dateSent = value; } }
+        public DateTime sentTime { get { return timeSent; } set { timeSent = value; } }
+        public int packetNumber { get { return packetNum; } set { packetNum = value; } }
+        public int extensometer { get { return soilMove; } set { soilMove = value; } }
+        public double sensor1 { get { return this.s1; } set { s1 = value; } }
+        public double sensor2 { get { return this.s2; } set { s2 = value; } }
+        public double sensor3 { get { return s3; } set { s3 = value; } }
+        public double rainsensor { get { return rain; } set { rain = value; } }
+    }
+
+
 }

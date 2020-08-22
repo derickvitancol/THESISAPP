@@ -28,6 +28,8 @@
         <Label Content="RainFall" HorizontalAlignment="Left" Margin="10,308,0,0" VerticalAlignment="Top" Width="108"/>
         <Label Content="Latest Transmission Data" HorizontalAlignment="Left" Margin="10,148,0,0" VerticalAlignment="Top" Width="233"/>
         <DataGrid x:Name="gridTransmit" HorizontalAlignment="Left" Height="344" Margin="434,47,0,0" VerticalAlignment="Top" Width="334"/>
+
+
         <Button Content="Button" HorizontalAlignment="Left" Margin="434,13,0,0" VerticalAlignment="Top" Width="75"/>
         <GroupBox Header="GroupBox" HorizontalAlignment="Left" Height="105" Margin="18,43,0,0" VerticalAlignment="Top" Width="401"/>
 
