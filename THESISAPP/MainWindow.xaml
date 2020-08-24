@@ -9,29 +9,33 @@
     <Grid Margin="0,0,0,-6">
         <ComboBox x:Name="comboPortName" HorizontalAlignment="Left" Margin="123,10,0,0" VerticalAlignment="Top" Width="120" MouseDoubleClick="ComboPortName_MouseDoubleClick"/>
         <Label Content="Available Ports:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="textboxMovement" HorizontalAlignment="Left" Height="27" Margin="125,217,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="294"/>
+        <TextBox x:Name="textboxMovement" HorizontalAlignment="Left" Height="27" Margin="148,216,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="197"/>
         <Label Content="Date and Time Sent: " HorizontalAlignment="Left" Margin="10,179,0,0" VerticalAlignment="Top" Width="121" RenderTransformOrigin="0.5,0.5"/>
-        <Button x:Name="buttonStartReceive" Content="Start Receiving" HorizontalAlignment="Left" Margin="125,353,0,0" VerticalAlignment="Top" Width="93" Height="38" Click="ButtonStartReceive_Click"/>
-        <Button x:Name="buttonStopReceive" Content="Stop Receiving" HorizontalAlignment="Left" Margin="247,353,0,0" VerticalAlignment="Top" Width="91" Height="38" Click="ButtonStopReceive_Click"/>
+        <Button x:Name="buttonStartReceive" Content="Start Receiving" HorizontalAlignment="Left" Margin="123,367,0,0" VerticalAlignment="Top" Width="93" Height="38" Click="ButtonStartReceive_Click"/>
+        <Button x:Name="buttonStopReceive" Content="Stop Receiving" HorizontalAlignment="Left" Margin="249,367,0,0" VerticalAlignment="Top" Width="91" Height="38" Click="ButtonStopReceive_Click"/>
         <Button x:Name="buttonRefresh" Content="Refresh" HorizontalAlignment="Left" Margin="284,13,0,0" VerticalAlignment="Top" Width="75" Click="ButtonRefresh_Click"/>
         <TextBox x:Name="textboxS1" HorizontalAlignment="Left" Height="23" Margin="142,264,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="66"/>
-        <TextBox x:Name="textboxRainfall" HorizontalAlignment="Left" Height="23" Margin="125,312,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="294"/>
+        <TextBox x:Name="textboxRainfall" HorizontalAlignment="Left" Height="23" Margin="90,311,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="118"/>
         <TextBox x:Name="textboxDate" HorizontalAlignment="Left" Height="23" Margin="158,179,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
         <TextBox x:Name="textboxTime" HorizontalAlignment="Left" Height="23" Margin="299,179,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
-        <Label Content="Slope Movement" HorizontalAlignment="Left" Margin="10,217,0,0" VerticalAlignment="Top" Width="108"/>
-        <Label Content="Soil Moisture" HorizontalAlignment="Left" Margin="10,261,0,0" VerticalAlignment="Top" Width="108"/>
+        <Label Content="Slope Movement (cm)" HorizontalAlignment="Left" Margin="10,217,0,0" VerticalAlignment="Top" Width="138"/>
+        <Label Content="Soil Moisture(%)" HorizontalAlignment="Left" Margin="10,261,0,0" VerticalAlignment="Top" Width="108"/>
         <Label Content="S1" HorizontalAlignment="Left" Margin="114,261,0,0" VerticalAlignment="Top"/>
         <Label Content="S2" HorizontalAlignment="Left" Margin="236,261,0,0" VerticalAlignment="Top"/>
         <Label Content="S3" HorizontalAlignment="Left" Margin="336,261,0,0" VerticalAlignment="Top"/>
         <TextBox x:Name="textboxS2" HorizontalAlignment="Left" Height="23" Margin="258,265,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="64"/>
         <TextBox x:Name="textboxS3" HorizontalAlignment="Left" Height="23" Margin="364,265,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="55"/>
-        <Label Content="RainFall" HorizontalAlignment="Left" Margin="10,308,0,0" VerticalAlignment="Top" Width="108"/>
+        <Label Content="RainFall(mm)" HorizontalAlignment="Left" Margin="10,308,0,0" VerticalAlignment="Top" Width="108"/>
         <Label Content="Latest Transmission Data" HorizontalAlignment="Left" Margin="10,148,0,0" VerticalAlignment="Top" Width="233"/>
-        <DataGrid x:Name="gridTransmit" HorizontalAlignment="Left" Height="344" Margin="434,47,0,0" VerticalAlignment="Top" Width="334"/>
-
-
-        <Button Content="Button" HorizontalAlignment="Left" Margin="434,13,0,0" VerticalAlignment="Top" Width="75"/>
-        <GroupBox Header="GroupBox" HorizontalAlignment="Left" Height="105" Margin="18,43,0,0" VerticalAlignment="Top" Width="401"/>
+        <DataGrid x:Name="gridTransmit" HorizontalAlignment="Left" Height="344" Margin="434,47,0,0" VerticalAlignment="Top" Width="334" HeadersVisibility="None"/>
+        
+        <TextBox x:Name="textboxRainRate" HorizontalAlignment="Left" Height="23" Margin="334,311,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="85"/>
+        <Button x:Name="buttonSilent" Content="SILENT Alarm" HorizontalAlignment="Left" Margin="327,112,0,0" VerticalAlignment="Top" Width="81" Height="26" RenderTransformOrigin="1.711,-2.385" Click="Button_Click"/>
+        <Button x:Name="buttonStopAlarm" Content="Stop Alarm" HorizontalAlignment="Left" Margin="327,59,0,0" VerticalAlignment="Top" Width="92" Height="30" Click="ButtonStopAlarm_Click"/>
+        <Button x:Name="buttonShowData" Content="Show all Data" HorizontalAlignment="Left" Margin="434,10,0,0" VerticalAlignment="Top" Width="75" Click="ButtonShowData_Click"/>
+        <Label x:Name="labelWarnHeader" Content="WARNING" HorizontalAlignment="Left" Margin="10,41,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="labelWarning"  HorizontalAlignment="Left" Margin="10,71,0,0" VerticalAlignment="Top"/>
+        <Label Content="Rainfall Rate(mm/hr)" HorizontalAlignment="Left" Margin="208,308,0,0" VerticalAlignment="Top" Width="132"/>
 
     </Grid>
 </Window>

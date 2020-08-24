@@ -24,7 +24,7 @@ namespace THESISAPP
         public static DataTable LoadData()
         {
             DataTable savedData = new DataTable();
-            string query = "SELECT Date,HourSent as 'Hour Sent',MinuteSent as 'Minute Sent',SecondSent as 'Second Sent',TimeReceived as 'Time Received',PacketNumber as 'Packet Number',Movement as 'Soil Movement'," +
+            string query = "SELECT DateSent as 'Date Sent',HourSent as 'Hour Sent',MinuteSent as 'Minute Sent',SecondSent as 'Second Sent',TimeReceived as 'Time Received',PacketNumber as 'Packet Number',Movement as 'Soil Movement'," +
                 "Moisture1 as 'Soil Moisture Sensor 1',Moisture2 as 'Soil Moisture Sensor 2'," +
                 "Moisture3 as 'Soil Moisture Sensor 3',Rainfall as 'Amount of Rainfall' FROM DataTransmission";
 
@@ -65,21 +65,21 @@ namespace THESISAPP
         //FUNCTION TO WRITE A ROW IN THE DATABASE
         public static void EnterData(SenderData newData,DateTime receiveTime)
         {
-            string query = "INSERT INTO DataTransmission(DataTransmission.Date,DataTransmission.HourSent,DataTransmission.MinuteSent,DataTransmission.SecondSent," +
-                "DataTransmission.TimeReceived,DataTransmission.PacketNumber,DataTransmission.Movement,DataTransmission.Moisture1,DataTransmission.Moisture2," +
-                "DataTransmission.Moisture3,DataTransmission.Rainfall) VALUES(@date,@hr,@min,@sec,@tReceived,@pNum,@movement,@m1,@m2,@m3,@rain)";
+            string query = "INSERT INTO DataTransmission(DateSent,HourSent,MinuteSent,SecondSent," +
+                "TimeReceived,PacketNumber,Movement,Moisture1,Moisture2," +
+                "Moisture3,Rainfall) VALUES(@date,@hr,@min,@sec,@tReceived,@pNum,@movement,@m1,@m2,@m3,@rain)";
 
             using (SQLiteConnection conn = new SQLiteConnection(connectionstring))
             {
                 conn.Open();
                 SQLiteCommand command = new SQLiteCommand(query, conn);
                 
-
-                command.Parameters.AddWithValue("@date", newData.sentDate);
+                //mdy
+                command.Parameters.AddWithValue("@date", newData.sentDate.Date.ToString("MM/dd/yyyy"));
                 command.Parameters.AddWithValue("@tReceived", receiveTime.TimeOfDay);
-                command.Parameters.AddWithValue("@hr",newData.sentTime.Hour);
-                command.Parameters.AddWithValue("@min", newData.sentTime.Minute);
-                command.Parameters.AddWithValue("@sec", newData.sentTime.Second);
+                command.Parameters.AddWithValue("@hr",newData.sentDate.Hour);
+                command.Parameters.AddWithValue("@min", newData.sentDate.Minute);
+                command.Parameters.AddWithValue("@sec", newData.sentDate.Second);
                 command.Parameters.AddWithValue("@pNum", newData.packetNumber);
                 command.Parameters.AddWithValue("@movement", newData.extensometer);
                 command.Parameters.AddWithValue("@m1", newData.sensor1);
@@ -96,8 +96,8 @@ namespace THESISAPP
         public static DataTable getRainHour(DateTime timeSearch)
         {
             DataTable hourlyRain = new DataTable();
-            string query = "SELECT DataTransmission.Date,DataTransmission.HourSent,DataTransmission.MinuteSent,DataTransmission.SecondSent,DataTransmission.Rainfall " +
-                "FROM DataTransmission WHERE DataTransmission.Date=@dateNow AND DataTransmission.HourSent=@hourNow";
+            string query = "SELECT DateSent,HourSent,MinuteSent,SecondSent,Rainfall " +
+                "FROM DataTransmission WHERE DateSent=@dateNow AND HourSent=@hourNow";
 
             using (SQLiteConnection conn = new SQLiteConnection(connectionstring))
             {
@@ -105,7 +105,8 @@ namespace THESISAPP
 
                 SQLiteCommand command = new SQLiteCommand(query, conn);
                 SQLiteDataAdapter adapter = new SQLiteDataAdapter(command);
-
+                command.Parameters.AddWithValue("@dateNow", timeSearch.Date.ToString("MM/dd/yyyy"));
+                command.Parameters.AddWithValue("@hourNow", timeSearch.Hour);
                 adapter.Fill(hourlyRain);
                 conn.Close();
             }

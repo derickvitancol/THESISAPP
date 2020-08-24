@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Windows;
+using System.Media;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
@@ -33,6 +34,9 @@ namespace THESISAPP
         private string filteredString;
         SerialPort arduinoDevice;
         private DataTable transmitTable;
+        bool setAlarm = true;
+        SoundPlayer soundPlay;
+        bool soundPlaying = false;
         public MainWindow()
         {
             InitializeComponent();
@@ -41,9 +45,11 @@ namespace THESISAPP
             receivedStr = new ObservableCollection<transmission>();
 
             this.gridTransmit.ItemsSource = receivedStr;
-            
+            this.labelWarnHeader.Visibility = Visibility.Hidden;
+            this.labelWarning.Visibility = Visibility.Hidden;
             arduinoDevice = new SerialPort();
             transmitTable = new DataTable();
+            soundPlay = new SoundPlayer("appAlarm.wav");
 
         }
 
@@ -70,25 +76,32 @@ namespace THESISAPP
         //FUNCTION TO START THE RECEIVING OF PACKETS
         private void ButtonStartReceive_Click(object sender, RoutedEventArgs e)
         {
-
-            arduinoDevice = new SerialPort();
-            arduinoDevice.BaudRate = 9600;
-            arduinoDevice.PortName = this.comboPortName.SelectedValue.ToString();
-            arduinoDevice.DataReceived += listentoSerial;
-
-
-
-            arduinoDevice.Open();
-            if (arduinoDevice.IsOpen)
+            if(String.IsNullOrWhiteSpace(this.comboPortName.Text) != true)
             {
-                MessageBox.Show(arduinoDevice.PortName + "is open!", "Serial Port Opened", MessageBoxButton.OK, MessageBoxImage.Information);
-                this.buttonStartReceive.IsEnabled = false;
-                this.comboPortName.IsEnabled = false;
+                arduinoDevice = new SerialPort();
+                arduinoDevice.BaudRate = 9600;
+                arduinoDevice.PortName = this.comboPortName.SelectedValue.ToString();
+                arduinoDevice.DataReceived += listentoSerial;
+
+
+
+                arduinoDevice.Open();
+                if (arduinoDevice.IsOpen)
+                {
+                    MessageBox.Show(arduinoDevice.PortName + "is open!", "Serial Port Opened", MessageBoxButton.OK, MessageBoxImage.Information);
+                    this.buttonStartReceive.IsEnabled = false;
+                    this.comboPortName.IsEnabled = false;
+                }
+                else
+                {
+                    MessageBox.Show(arduinoDevice.PortName + " Failed to open!", "Failed to open", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
             }
             else
             {
-                MessageBox.Show(arduinoDevice.PortName + " Failed to open!", "Failed to open", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Please select the correct port name!","Invalid Port Name",MessageBoxButton.OK,MessageBoxImage.Exclamation);
             }
+            
 
 
         }
@@ -103,14 +116,15 @@ namespace THESISAPP
             Application.Current.Dispatcher.Invoke(new Action(() => {
                 latesttrans.content = serialP.ReadLine();
                 latesttrans.timeReceived = DateTime.Now;
+                
+                
                 //THIS CODE RUNS IN A DIFFERENT THREAD
 
 
-                if (latesttrans.content.Length > 30)
+                if ((latesttrans.content.IndexOf('*') > 0) &&(latesttrans.content.Length > 50))
                 {
                     receivedStr.Add(latesttrans);
-                    this.gridTransmit.Columns[0].Header = "Time Received";
-                    this.gridTransmit.Columns[1].Header = "Content of message";
+                    
                     filteredString = latesttrans.content.Substring(latesttrans.content.IndexOf('*') + 1, latesttrans.content.LastIndexOf('*') - latesttrans.content.IndexOf('*') - 1);
 
                     //PACKETNUMBER;DATE;TIME;SOILMOVEMENT;MOISTURE1,MOISTURE2,MOISTURE3;RAIN;
@@ -119,7 +133,13 @@ namespace THESISAPP
                     moistureArray = dataArray[4].Split(',');
 
                     this.textboxDate.Text = dataArray[1];
+                    string[] strarr = dataArray[1].Split('/');
+                                        //MONTH,DAY,YEAR
+                    int[] dateInt = { int.Parse(strarr[0]), int.Parse(strarr[1]), int.Parse(strarr[2]) };
+                    
                     this.textboxTime.Text = dataArray[2];
+                    strarr = dataArray[2].Split(':');//h,m,s
+                    int[] timeInt = { int.Parse(strarr[0]), int.Parse(strarr[1]), int.Parse(strarr[2]) };
                     this.textboxMovement.Text = dataArray[3];
                     this.textboxS1.Text = moistureArray[0];
                     this.textboxS2.Text = moistureArray[1];
@@ -127,8 +147,9 @@ namespace THESISAPP
                     this.textboxRainfall.Text = dataArray[5];
                     //SEND TO DB HERE
                     SenderData senderData = new SenderData();
-                    senderData.sentDate = Convert.ToDateTime(dataArray[1]);
-                    senderData.sentTime = Convert.ToDateTime(dataArray[2]);
+                    //y,m,d,h,m,s
+                    senderData.sentDate = new DateTime(dateInt[2], dateInt[0], dateInt[1], timeInt[0], timeInt[1], timeInt[2]);
+
                     senderData.packetNumber = Convert.ToInt16(dataArray[0]);
                     senderData.extensometer = Convert.ToInt16(dataArray[3]);
                     senderData.sensor1 = Convert.ToDouble(moistureArray[0]);
@@ -137,7 +158,33 @@ namespace THESISAPP
                     senderData.rainsensor = Convert.ToDouble(dataArray[5]);
 
                     Database.EnterData(senderData, latesttrans.timeReceived);
-
+                    //CREATE DATA ANALYSIS HERE IF TRUE SET THE ALARM 
+                    //SOIL MOISTURE 
+                    double rainfallRate = getRainRate(senderData.sentDate);
+                    this.textboxRainRate.Text = rainfallRate.ToString();
+                    if ((senderData.sensor1 >= 50) || (senderData.sensor3 >= 50) || (senderData.sensor3 >= 50))
+                    {
+                        //MAKETHE TEXT INSIDE THE GROUPBOX TO VALUE 
+                        this.labelWarnHeader.Visibility = Visibility.Visible;
+                        this.labelWarning.Visibility = Visibility.Visible;
+                        this.labelWarning.Content = String.Format("Moisture Levels: S1:{0} S2:{1} S3:{2}", senderData.sensor1.ToString(), senderData.sensor2.ToString(), senderData.sensor3.ToString());
+                        playAlarm();
+                       
+                    }//RAINFALL 
+                    else if (rainfallRate > 7.5)
+                    {
+                        this.labelWarnHeader.Visibility = Visibility.Visible;
+                        this.labelWarning.Visibility = Visibility.Visible;
+                        this.labelWarning.Content = String.Format("Rainfall Rate: {0}", senderData.rainsensor.ToString());
+                        playAlarm();
+                    }//soilmovement
+                    else if (senderData.extensometer >=10)
+                    {
+                        this.labelWarnHeader.Visibility = Visibility.Visible;
+                        this.labelWarning.Visibility = Visibility.Visible;
+                        this.labelWarning.Content = String.Format("Soil Movement: {0}", senderData.extensometer.ToString());
+                        playAlarm();
+                    }
                 }
 
             }));
@@ -167,6 +214,60 @@ namespace THESISAPP
                 MessageBox.Show("The port is closed!", "Port closed", MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
+
+        private double getRainRate(DateTime timeSearch)
+        {
+            double rainRate=0;
+            DataTable rainTable = Database.getRainHour(timeSearch); 
+
+            foreach(DataRow rainRow in rainTable.Rows)
+            {
+                rainRate += (double)rainRow["Rainfall"];
+            }
+            return rainRate;
+        }
+
+        private void playAlarm()
+        {
+            if(this.setAlarm == true && this.soundPlaying == false)
+            {
+                this.soundPlay.PlayLooping();
+                this.soundPlaying = true;
+            }
+            
+        }
+        //FUNCTION FOR SETTING THE SILENT ALARM OPTION
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            if(this.setAlarm == false)
+            {//PLAY SOUND IF TRUE
+                this.setAlarm = true;
+            }
+            else
+            {
+                this.setAlarm = false;
+            }
+        }
+
+        private void ButtonStopAlarm_Click(object sender, RoutedEventArgs e)
+        {
+            if(this.soundPlaying == true)
+            {
+                this.soundPlay.Stop();
+                this.soundPlaying = false;
+            }
+            else
+            {
+                MessageBox.Show("The alarm is not playing!","Alarm",MessageBoxButton.OK,MessageBoxImage.Information);
+            }
+        }
+
+        private void ButtonShowData_Click(object sender, RoutedEventArgs e)
+        {
+            DataWindow dataWin = new DataWindow(this);
+            this.Hide();
+            dataWin.Show();
+        }
     }
     //CLASS USED FOR TRANSMISSION OF DATA 
     public class transmission
@@ -174,7 +275,7 @@ namespace THESISAPP
         DateTime receiveTime;
         string receiveContent;
 
-        
+
 
 
         public DateTime timeReceived
@@ -196,7 +297,7 @@ namespace THESISAPP
     public class SenderData
     {
         DateTime dateSent;
-        DateTime timeSent;
+        //DateTime timeSent;
 
         int packetNum;
         int soilMove;
@@ -205,7 +306,7 @@ namespace THESISAPP
         double rain;
 
         public DateTime sentDate { get { return dateSent; } set { dateSent = value; } }
-        public DateTime sentTime { get { return timeSent; } set { timeSent = value; } }
+        //public DateTime sentTime { get { return timeSent; } set { timeSent = value; } }
         public int packetNumber { get { return packetNum; } set { packetNum = value; } }
         public int extensometer { get { return soilMove; } set { soilMove = value; } }
         public double sensor1 { get { return this.s1; } set { s1 = value; } }
