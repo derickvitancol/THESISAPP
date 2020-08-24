@@ -83,8 +83,6 @@ namespace THESISAPP
                 arduinoDevice.PortName = this.comboPortName.SelectedValue.ToString();
                 arduinoDevice.DataReceived += listentoSerial;
 
-
-
                 arduinoDevice.Open();
                 if (arduinoDevice.IsOpen)
                 {
@@ -101,10 +99,8 @@ namespace THESISAPP
             {
                 MessageBox.Show("Please select the correct port name!","Invalid Port Name",MessageBoxButton.OK,MessageBoxImage.Exclamation);
             }
-            
-
-
         }
+
         //FUNCTION THAT LISTENS TO THE SERIAL PORT
         private void listentoSerial(object sender, SerialDataReceivedEventArgs e)
         {
@@ -117,10 +113,7 @@ namespace THESISAPP
                 latesttrans.content = serialP.ReadLine();
                 latesttrans.timeReceived = DateTime.Now;
                 
-                
                 //THIS CODE RUNS IN A DIFFERENT THREAD
-
-
                 if ((latesttrans.content.IndexOf('*') > 0) &&(latesttrans.content.Length > 50))
                 {
                     receivedStr.Add(latesttrans);
@@ -145,8 +138,10 @@ namespace THESISAPP
                     this.textboxS2.Text = moistureArray[1];
                     this.textboxS3.Text = moistureArray[2];
                     this.textboxRainfall.Text = dataArray[5];
+
                     //SEND TO DB HERE
                     SenderData senderData = new SenderData();
+
                     //y,m,d,h,m,s
                     senderData.sentDate = new DateTime(dateInt[2], dateInt[0], dateInt[1], timeInt[0], timeInt[1], timeInt[2]);
 
@@ -158,6 +153,7 @@ namespace THESISAPP
                     senderData.rainsensor = Convert.ToDouble(dataArray[5]);
 
                     Database.EnterData(senderData, latesttrans.timeReceived);
+
                     //CREATE DATA ANALYSIS HERE IF TRUE SET THE ALARM 
                     //SOIL MOISTURE 
                     double rainfallRate = getRainRate(senderData.sentDate);
