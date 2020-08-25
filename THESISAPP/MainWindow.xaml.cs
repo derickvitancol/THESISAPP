@@ -238,15 +238,14 @@ namespace THESISAPP
             if(this.setAlarm == false)
             {//PLAY SOUND IF TRUE
                 this.setAlarm = true;
-                buttonSilent.Content = "🔇";
-                buttonSilent.FontSize = 32;
+                buttonSilent.Content = "🔊";
+                buttonSilent.FontSize = 24;
             }
             else
             {
                 this.setAlarm = false;
-                buttonSilent.Content = "🔊";
-                buttonSilent.FontSize = 24;
-
+                buttonSilent.Content = "🔇";
+                buttonSilent.FontSize = 32;
             }
         }
 
