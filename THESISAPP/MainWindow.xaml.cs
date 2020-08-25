@@ -72,6 +72,7 @@ namespace THESISAPP
         private void ButtonRefresh_Click(object sender, RoutedEventArgs e)
         {
             this.comboPortName.ItemsSource = getPorts();
+            MessageBox.Show("The Port have been refreshed.","Refreshed",MessageBoxButton.OK,MessageBoxImage.Information);
         }
 
         //FUNCTION TO START THE RECEIVING OF PACKETS
