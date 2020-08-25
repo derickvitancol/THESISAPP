@@ -29,7 +29,7 @@ namespace THESISAPP
     /// </summary>
     public partial class MainWindow : Window
     {
-
+        
         private ObservableCollection<transmission> receivedStr;
         private string filteredString;
         SerialPort arduinoDevice;
@@ -38,6 +38,7 @@ namespace THESISAPP
         SoundPlayer soundPlay;
         bool soundPlaying = false;
         public MainWindow()
+
         {
             InitializeComponent();
 
@@ -46,7 +47,7 @@ namespace THESISAPP
 
             this.gridTransmit.ItemsSource = receivedStr;
             this.labelWarnHeader.Visibility = Visibility.Hidden;
-            this.labelWarning.Visibility = Visibility.Hidden;
+            this.warningData.Visibility = Visibility.Hidden;
             arduinoDevice = new SerialPort();
             transmitTable = new DataTable();
             soundPlay = new SoundPlayer("appAlarm.wav");
@@ -92,7 +93,7 @@ namespace THESISAPP
                 }
                 else
                 {
-                    MessageBox.Show(arduinoDevice.PortName + " Failed to open!", "Failed to open", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show(arduinoDevice.PortName + " Failed to open!", "Failed to Open", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
             else
@@ -162,23 +163,22 @@ namespace THESISAPP
                     {
                         //MAKETHE TEXT INSIDE THE GROUPBOX TO VALUE 
                         this.labelWarnHeader.Visibility = Visibility.Visible;
-                        this.labelWarning.Visibility = Visibility.Visible;
-                        this.labelWarning.Content = String.Format("Moisture Levels: S1:{0} S2:{1} S3:{2}", senderData.sensor1.ToString(), senderData.sensor2.ToString(), senderData.sensor3.ToString());
+                        this.warningData.Visibility = Visibility.Visible;
+                        this.warningData.Text = String.Format("Moisture Levels: S1:{0} S2:{1} S3:{2}", senderData.sensor1.ToString(), senderData.sensor2.ToString(), senderData.sensor3.ToString());
                         playAlarm();
-                       
                     }//RAINFALL 
                     else if (rainfallRate > 7.5)
                     {
                         this.labelWarnHeader.Visibility = Visibility.Visible;
-                        this.labelWarning.Visibility = Visibility.Visible;
-                        this.labelWarning.Content = String.Format("Rainfall Rate: {0}", senderData.rainsensor.ToString());
+                        this.warningData.Visibility = Visibility.Visible;
+                        this.warningData.Text = String.Format("Rainfall Rate: {0}", senderData.rainsensor.ToString());
                         playAlarm();
                     }//soilmovement
                     else if (senderData.extensometer >=10)
                     {
                         this.labelWarnHeader.Visibility = Visibility.Visible;
-                        this.labelWarning.Visibility = Visibility.Visible;
-                        this.labelWarning.Content = String.Format("Soil Movement: {0}", senderData.extensometer.ToString());
+                        this.warningData.Visibility = Visibility.Visible;
+                        this.warningData.Text = String.Format("Soil Movement: {0}", senderData.extensometer.ToString());
                         playAlarm();
                     }
                 }
@@ -238,10 +238,15 @@ namespace THESISAPP
             if(this.setAlarm == false)
             {//PLAY SOUND IF TRUE
                 this.setAlarm = true;
+                buttonSilent.Content = "🔇";
+                buttonSilent.FontSize = 32;
             }
             else
             {
                 this.setAlarm = false;
+                buttonSilent.Content = "🔊";
+                buttonSilent.FontSize = 24;
+
             }
         }
 
@@ -251,6 +256,7 @@ namespace THESISAPP
             {
                 this.soundPlay.Stop();
                 this.soundPlaying = false;
+                
             }
             else
             {

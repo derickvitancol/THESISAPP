@@ -44,7 +44,7 @@ namespace THESISAPP
         private void ButtonReturn_Click(object sender, RoutedEventArgs e)
         {
             
-            MessageBoxResult messRes = MessageBox.Show("Are you sure you want to return to the main window? ", "Go to main", MessageBoxButton.YesNo, MessageBoxImage.Question);
+            MessageBoxResult messRes = MessageBox.Show("Are you sure you want to return to the main window? ", "Go to Main Window", MessageBoxButton.YesNo, MessageBoxImage.Question);
             if (messRes == MessageBoxResult.Yes)
             {
                 this.previousWin.Show();

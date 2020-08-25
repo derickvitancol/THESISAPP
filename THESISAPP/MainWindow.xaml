@@ -5,8 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:THESISAPP"
         mc:Ignorable="d"
-        Title="Early Warning System" Height="578" Width="800" Background="#FFF2D1D1">
-    <Grid Margin="0,0,-129.667,-6.333" Height="555" VerticalAlignment="Top">
+        Title="Landslide Early Warning System - Data Viewer" Height="648.889" Width="952" Background="#FFF2D1D1" ResizeMode="CanMinimize" WindowStartupLocation="CenterScreen">
+    <Grid Margin="2,0,-1.333,0" Height="670" VerticalAlignment="Top" HorizontalAlignment="Left" Width="946">
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
@@ -16,37 +16,75 @@
                 <GradientStop Color="#FFE9DDD2" Offset="0.324"/>
             </LinearGradientBrush>
         </Grid.Background>
-        <ComboBox x:Name="comboPortName" HorizontalAlignment="Left" Margin="141,160,0,0" VerticalAlignment="Top" Width="120" MouseDoubleClick="ComboPortName_MouseDoubleClick" Height="22"/>
-        <Label Content="Available Ports:" HorizontalAlignment="Left" Margin="28,160,0,0" VerticalAlignment="Top" Height="26" Width="91"/>
-        <TextBox x:Name="textboxMovement" HorizontalAlignment="Left" Height="27" Margin="154,358,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="197" IsReadOnly="True" Background="#FFF5F3F3"/>
-        <Label Content="Date and Time Sent: " HorizontalAlignment="Left" Margin="16,321,0,0" VerticalAlignment="Top" Width="121" RenderTransformOrigin="0.5,0.5" Height="26"/>
-        <Button x:Name="buttonStartReceive" Content="Start Receiving" HorizontalAlignment="Left" Margin="129,509,0,0" VerticalAlignment="Top" Width="93" Height="38" Click="ButtonStartReceive_Click"/>
-        <Button x:Name="buttonStopReceive" Content="Stop Receiving" HorizontalAlignment="Left" Margin="255,509,0,0" VerticalAlignment="Top" Width="91" Height="38" Click="ButtonStopReceive_Click"/>
-        <Button x:Name="buttonRefresh" Content="Refresh" HorizontalAlignment="Left" Margin="277,159,0,0" VerticalAlignment="Top" Width="75" Click="ButtonRefresh_Click" Height="21"/>
-        <TextBox x:Name="textboxS1" HorizontalAlignment="Left" Height="23" Margin="148,406,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="66" IsReadOnly="True" Background="#FFF5F3F3"/>
-        <TextBox x:Name="textboxRainfall" HorizontalAlignment="Left" Height="23" Margin="96,453,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="118" IsReadOnly="True" Background="#FFF5F3F3"/>
-        <TextBox x:Name="textboxDate" HorizontalAlignment="Left" Height="23" Margin="164,321,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" IsReadOnly="True" Background="#FFF5F3F3"/>
-        <TextBox x:Name="textboxTime" HorizontalAlignment="Left" Height="23" Margin="305,321,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" IsReadOnly="True" Background="#FFF5F3F3"/>
-        <Label Content="Slope Movement (cm)" HorizontalAlignment="Left" Margin="16,359,0,0" VerticalAlignment="Top" Width="138" Height="26"/>
-        <Label Content="Soil Moisture(%)" HorizontalAlignment="Left" Margin="16,403,0,0" VerticalAlignment="Top" Width="108" Height="26"/>
-        <Label Content="S1" HorizontalAlignment="Left" Margin="120,403,0,0" VerticalAlignment="Top" Height="26" Width="23"/>
-        <Label Content="S2" HorizontalAlignment="Left" Margin="242,403,0,0" VerticalAlignment="Top" Height="26" Width="23"/>
-        <Label Content="S3" HorizontalAlignment="Left" Margin="342,403,0,0" VerticalAlignment="Top" Height="26" Width="23"/>
-        <TextBox x:Name="textboxS2" HorizontalAlignment="Left" Height="23" Margin="264,407,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="64" IsReadOnly="True" Background="#FFF5F3F3"/>
-        <TextBox x:Name="textboxS3" HorizontalAlignment="Left" Height="23" Margin="370,407,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="55" IsReadOnly="True" Background="#FFF5F3F3"/>
-        <Label Content="RainFall(mm)" HorizontalAlignment="Left" Margin="16,450,0,0" VerticalAlignment="Top" Width="108" Height="26"/>
-        <Label Content="Latest Transmission Data" HorizontalAlignment="Left" Margin="16,290,0,0" VerticalAlignment="Top" Width="233" Height="26"/>
-        <DataGrid x:Name="gridTransmit" HorizontalAlignment="Left" Height="344" Margin="507,166,0,0" VerticalAlignment="Top" Width="386" HeadersVisibility="None" IsReadOnly="True"/>
+        <Border BorderThickness="1" HorizontalAlignment="Left" Height="105" Margin="36,21,0,0" VerticalAlignment="Top" Width="867" CornerRadius="30">
+            <Border.Background>
+                <SolidColorBrush Color="#FF214452"/>
+            </Border.Background>
+            <Border.BorderBrush>
+                <SolidColorBrush Color="White" Opacity="0"/>
+            </Border.BorderBrush>
+        </Border>
 
-        <TextBox x:Name="textboxRainRate" HorizontalAlignment="Left" Height="23" Margin="340,453,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="85" IsReadOnly="True" Background="#FFF5F3F3"/>
-        <Button x:Name="buttonSilent" Content="SILENT Alarm" HorizontalAlignment="Left" Margin="359,260,0,0" VerticalAlignment="Top" Width="81" Height="26" RenderTransformOrigin="1.711,-2.385" Click="Button_Click"/>
-        <Button x:Name="buttonStopAlarm" Content="Stop Alarm" HorizontalAlignment="Left" Margin="358,223,0,0" VerticalAlignment="Top" Width="92" Height="30" Click="ButtonStopAlarm_Click" RenderTransformOrigin="0.366,0.611"/>
-        <Button x:Name="buttonShowData" Content="Show all Data" HorizontalAlignment="Left" Margin="503,127,0,0" VerticalAlignment="Top" Width="89" Click="ButtonShowData_Click" Height="21"/>
-        <Label x:Name="labelWarnHeader" Content="WARNING" HorizontalAlignment="Left" Margin="28,191,0,0" VerticalAlignment="Top" Height="25" Width="65"/>
-        <Label x:Name="labelWarning"  HorizontalAlignment="Left" Margin="19,191,0,0" VerticalAlignment="Top" Height="11" Width="10"/>
-        <Label Content="Rainfall Rate(mm/hr)" HorizontalAlignment="Left" Margin="214,450,0,0" VerticalAlignment="Top" Width="132" Height="26"/>
-        <Label Content="LANDSLIDE EARLY WARNING SYSTEM" HorizontalAlignment="Left" Margin="47,20,0,0" VerticalAlignment="Top" Height="64" Width="689" FontFamily="Segoe UI Black" FontSize="36" Grid.ColumnSpan="2" FontWeight="Bold"/>
-        <Label Content="DATA VIEWER" HorizontalAlignment="Left" Margin="307,74,0,0" VerticalAlignment="Top" Height="43" Width="180" FontSize="24" FontFamily="Segoe UI Black"/>
+        <Border BorderThickness="1" HorizontalAlignment="Left" Height="249" Margin="532,165,0,0" VerticalAlignment="Top" Width="373" CornerRadius="10">
+            <Border.BorderBrush>
+                <SolidColorBrush Color="#FF214452" Opacity="0.3"/>
+            </Border.BorderBrush>
+        </Border>
+        <Label Content="Available Ports:" HorizontalAlignment="Left" Margin="30,168,0,0" VerticalAlignment="Top" Height="26" Width="117" FontSize="14" FontWeight="Bold" Foreground="#FF214452"/>
+        <TextBox x:Name="textboxMovement" HorizontalAlignment="Left" Height="27" Margin="213,265,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="296" IsReadOnly="True" Background="#FFF5F3F3" FontSize="14" Foreground="#FF214452"/>
+        <Label Content="Date and Time Sent : " HorizontalAlignment="Left" Margin="48,231,0,0" VerticalAlignment="Top" Width="148" RenderTransformOrigin="0.5,0.5" Height="26" FontSize="14" FontWeight="Bold" Foreground="#FF214452"/>
+        <TextBox x:Name="textboxS1" HorizontalAlignment="Left" Height="28" Margin="201,301,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="80" IsReadOnly="True" Background="#FFF5F3F3" FontSize="14" Foreground="#FF214452"/>
+        <TextBox x:Name="textboxRainfall" HorizontalAlignment="Left" Height="28" Margin="161,336,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="97" IsReadOnly="True" Background="#FFF5F3F3" FontSize="14" Foreground="#FF214452"/>
+        <TextBox x:Name="textboxDate" HorizontalAlignment="Left" Height="28" Margin="200,230,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="151" IsReadOnly="True" Background="#FFF5F3F3" FontSize="14" Foreground="#FF214452"/>
+        <TextBox x:Name="textboxTime" HorizontalAlignment="Left" Height="28" Margin="361,230,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="147" IsReadOnly="True" Background="#FFF5F3F3" FontSize="14" Foreground="#FF214452"/>
+        <Label Content="Slope Movement (cm) :" HorizontalAlignment="Left" Margin="48,266,0,0" VerticalAlignment="Top" Width="176" Height="26" FontSize="14" FontWeight="Bold" Foreground="#FF214452"/>
+        <Label Content="Soil Moisture (%) :" HorizontalAlignment="Left" Margin="49,301,0,0" VerticalAlignment="Top" Width="137" Height="26" FontSize="14" FontWeight="Bold" Foreground="#FF214452"/>
+        <Label Content="S1" HorizontalAlignment="Left" Margin="176,301,0,0" VerticalAlignment="Top" Height="26" Width="25" FontSize="14" FontWeight="Bold" Foreground="#FF214452"/>
+        <Label Content="S2" HorizontalAlignment="Left" Margin="288,301,0,0" VerticalAlignment="Top" Height="26" Width="25" FontSize="14" FontWeight="Bold" Foreground="#FF214452"/>
+        <Label Content="S3" HorizontalAlignment="Left" Margin="401,301,0,0" VerticalAlignment="Top" Height="26" Width="26" FontSize="14" FontWeight="Bold" Foreground="#FF214452"/>
+        <TextBox x:Name="textboxS2" HorizontalAlignment="Left" Height="28" Margin="314,301,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="80" IsReadOnly="True" Background="#FFF5F3F3" FontSize="14" Foreground="#FF214452"/>
+        <TextBox x:Name="textboxS3" HorizontalAlignment="Left" Height="28" Margin="429,300,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="80" IsReadOnly="True" Background="#FFF5F3F3" FontSize="14" Foreground="#FF214452"/>
+        <Label Content="RainFall (mm) :" HorizontalAlignment="Left" Margin="48,335,0,0" VerticalAlignment="Top" Width="108" Height="26" FontSize="14" FontWeight="Bold" Foreground="#FF214452"/>
+        <Label Content="Latest Transmission Data" HorizontalAlignment="Left" Margin="30,201,0,0" VerticalAlignment="Top" Width="233" Height="26" FontSize="14" FontWeight="Bold" Foreground="#FF214452"/>
+        <DataGrid x:Name="gridTransmit" HorizontalAlignment="Left" Height="148" Margin="44,438,0,0" VerticalAlignment="Top" Width="863" HeadersVisibility="None" IsReadOnly="True" FontSize="14" Foreground="#FF214452"/>
+
+        <TextBox x:Name="textboxRainRate" HorizontalAlignment="Left" Height="23" Margin="421,341,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="88" IsReadOnly="True" Background="#FFF5F3F3" FontSize="14" Foreground="#FF214452"/>
+        <Button x:Name="buttonSilent" Content="🔇" HorizontalAlignment="Left" Margin="633,344,0,0" VerticalAlignment="Top" Width="53" Height="45" RenderTransformOrigin="1.711,-2.385" Click="Button_Click" FontSize="32" Foreground="#FF214452">
+            <Button.BorderBrush>
+                <SolidColorBrush Color="#FF707070" Opacity="0"/>
+            </Button.BorderBrush>
+            <Button.Background>
+                <SolidColorBrush Color="#FFDDDDDD" Opacity="0"/>
+            </Button.Background>
+        </Button>
+        <Label x:Name="labelWarnHeader" Content="WARNING" HorizontalAlignment="Left" Margin="667,193,0,0" VerticalAlignment="Top" Height="56" Width="127" FontWeight="Bold" FontFamily="Segoe UI Black" FontSize="22" Foreground="#FFB02E2E"/>
+        <Label Content="Rainfall Rate (mm/hr) : " HorizontalAlignment="Left" Margin="260,338,0,0" VerticalAlignment="Top" Width="167" Height="26" FontSize="14" FontWeight="Bold" Foreground="#FF214452"/>
+        <Label Content="LANDSLIDE EARLY WARNING SYSTEM" HorizontalAlignment="Left" Margin="120,18,-94,0" VerticalAlignment="Top" Height="64" Width="920" FontFamily="Segoe UI Black" FontSize="36" FontWeight="Bold" FontStyle="Italic" Foreground="#FFFBFBEB"/>
+        <Label Content="DATA VIEWER" HorizontalAlignment="Left" Margin="363,80,0,0" VerticalAlignment="Top" Height="48" Width="182" FontSize="24" FontFamily="Segoe UI Black" Foreground="#FFFBFBEB"/>
+        <GridSplitter HorizontalAlignment="Left" Height="680" Margin="462,-263,0,0" VerticalAlignment="Top" Width="6" RenderTransformOrigin="0.5,0.5" Foreground="#FF51A3C4" Background="#FFFBFBEB">
+            <GridSplitter.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform Angle="90"/>
+                    <TranslateTransform/>
+                </TransformGroup>
+            </GridSplitter.RenderTransform>
+        </GridSplitter>
+        <ComboBox x:Name="comboPortName" HorizontalAlignment="Left" Margin="145,169,0,0" VerticalAlignment="Top" Width="132" MouseDoubleClick="ComboPortName_MouseDoubleClick" Height="27" RenderTransformOrigin="0.246,0.96" FontSize="14" Foreground="#FF214452"/>
+        <Button x:Name="buttonRefresh" Content="Refresh" HorizontalAlignment="Left" Margin="291,168,0,0" VerticalAlignment="Top" Width="80" Click="ButtonRefresh_Click" Height="28" FontSize="14" Foreground="#FF214452" FontWeight="Bold" Background="#FFD5F3F6"/>
+        <Button x:Name="buttonStartReceive" Content="Start Receiving" HorizontalAlignment="Left" Margin="81,384,0,0" VerticalAlignment="Top" Width="115" Height="28" Click="ButtonStartReceive_Click" FontSize="14" Foreground="#FF214452" FontWeight="Bold" Background="#FFD5F3F6"/>
+        <Button x:Name="buttonStopReceive" Content="Stop Receiving" HorizontalAlignment="Left" Margin="209,384,0,0" VerticalAlignment="Top" Width="115" Height="28" Click="ButtonStopReceive_Click" FontSize="14" Foreground="#FF214452" FontWeight="Bold" Background="#FFD5F3F6"/>
+        <Button x:Name="buttonShowData" Content="Show all Data" HorizontalAlignment="Left" Margin="337,384,0,0" VerticalAlignment="Top" Width="113" Click="ButtonShowData_Click" Height="28" Foreground="#FF214452" FontWeight="Bold" Background="#FFD5F3F6"/>
+        <TextBox x:Name="warningData" HorizontalAlignment="Left" Height="42" Margin="536,267,0,0" TextWrapping="Wrap" Text="Moisture Levels: S1: 50 S2:70 S3:50 " VerticalAlignment="Top" Width="364" FontSize="20" FontWeight="Bold" TextAlignment="Center" IsReadOnly="True" Foreground="#FF214452">
+            <TextBox.BorderBrush>
+                <SolidColorBrush Color="#FFABADB3" Opacity="0"/>
+            </TextBox.BorderBrush>
+            <TextBox.Background>
+                <SolidColorBrush Color="White" Opacity="0"/>
+            </TextBox.Background>
+        </TextBox>
+        <Button x:Name="buttonStopAlarm" Content="Stop Alarm" HorizontalAlignment="Left" Margin="695,355,0,0" VerticalAlignment="Top" Width="105" Height="28" Click="ButtonStopAlarm_Click" RenderTransformOrigin="0.366,0.611" FontSize="14" Background="#FFD5F3F6" FontWeight="Bold" Foreground="#FF214452"/>
 
     </Grid>
 </Window>

@@ -5,12 +5,18 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:THESISAPP"
         mc:Ignorable="d"
-        Title="DataWindow" Height="450" Width="800">
+        Title="Landslide Early Warning System - Data Viewer" Height="450" Width="800" ResizeMode="CanMinimize" WindowStartupLocation="CenterScreen">
     <Grid>
-        <DataGrid  x:Name="datagridSensorData" HorizontalAlignment="Left" Height="266" Margin="37,35,0,0" VerticalAlignment="Top" Width="718"/>
-        <Button x:Name="buttonClearData" Content="Clear All Data" HorizontalAlignment="Left" Margin="46,340,0,0" VerticalAlignment="Top" Width="135" RenderTransformOrigin="-1.253,0.3" Height="36" Click="ButtonClearData_Click"/>
-        <Button x:Name="buttonReturn" Content="Return" HorizontalAlignment="Left" Margin="204,340,0,0" VerticalAlignment="Top" Width="135" Height="36" Click="ButtonReturn_Click"/>
-        <Button x:Name="buttonRefresh" Content="Refresh" HorizontalAlignment="Left" Margin="360,340,0,0" VerticalAlignment="Top" Width="135" Height="36"  Click="ButtonRefresh_Click"/>
+        <Grid.Background>
+            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                <GradientStop Color="#FFE9DDD2" Offset="0.324"/>
+                <GradientStop Color="#FFF0B7A4" Offset="1"/>
+            </LinearGradientBrush>
+        </Grid.Background>
+        <DataGrid  x:Name="datagridSensorData" HorizontalAlignment="Left" Height="290" Margin="37,35,0,0" VerticalAlignment="Top" Width="718" Foreground="#FF214452" FontSize="14"/>
+        <Button x:Name="buttonClearData" Content="Clear All Data" HorizontalAlignment="Left" Margin="108,348,0,0" VerticalAlignment="Top" Width="135" RenderTransformOrigin="-1.253,0.3" Height="28" Click="ButtonClearData_Click" Background="#FFD5F3F6" Foreground="#FF214452" FontSize="14" FontWeight="Bold"/>
+        <Button x:Name="buttonReturn" Content="Return" HorizontalAlignment="Left" Margin="325,348,0,0" VerticalAlignment="Top" Width="135" Height="28" Click="ButtonReturn_Click" Background="#FFD5F3F6" Foreground="#FF214452" FontSize="14" FontWeight="Bold"/>
+        <Button x:Name="buttonRefresh" Content="Refresh" HorizontalAlignment="Left" Margin="545,348,0,0" VerticalAlignment="Top" Width="135" Height="28"  Click="ButtonRefresh_Click" Background="#FFD5F3F6" Foreground="#FF214452" FontSize="14" FontWeight="Bold"/>
 
     </Grid>
 </Window>
