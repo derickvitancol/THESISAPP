@@ -49,7 +49,7 @@
         <DataGrid x:Name="gridTransmit" HorizontalAlignment="Left" Height="148" Margin="44,438,0,0" VerticalAlignment="Top" Width="863" HeadersVisibility="None" IsReadOnly="True" FontSize="14" Foreground="#FF214452"/>
 
         <TextBox x:Name="textboxRainRate" HorizontalAlignment="Left" Height="23" Margin="421,341,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="88" IsReadOnly="True" Background="#FFF5F3F3" FontSize="14" Foreground="#FF214452"/>
-        <Button x:Name="buttonSilent" Content="🔇" HorizontalAlignment="Left" Margin="633,344,0,0" VerticalAlignment="Top" Width="53" Height="45" RenderTransformOrigin="1.711,-2.385" Click="Button_Click" FontSize="32" Foreground="#FF214452">
+        <Button x:Name="buttonSilent" Content="🔊" HorizontalAlignment="Left" Margin="633,344,0,0" VerticalAlignment="Top" Width="53" Height="45" RenderTransformOrigin="1.711,-2.385" Click="Button_Click" FontSize="24" Foreground="#FF214452">
             <Button.BorderBrush>
                 <SolidColorBrush Color="#FF707070" Opacity="0"/>
             </Button.BorderBrush>
