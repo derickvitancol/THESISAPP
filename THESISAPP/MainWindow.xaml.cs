@@ -153,8 +153,15 @@ namespace THESISAPP
                     senderData.sensor2 = Convert.ToDouble(moistureArray[1]);
                     senderData.sensor3 = Convert.ToDouble(moistureArray[2]);
                     senderData.rainsensor = Convert.ToDouble(dataArray[5]);
-
-                    Database.EnterData(senderData, latesttrans.timeReceived);
+                    try
+                    {
+                        Database.EnterData(senderData, latesttrans.timeReceived);
+                    }
+                    catch(Exception ex)
+                    {
+                        MessageBox.Show(ex.Message, "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                   
 
                     //CREATE DATA ANALYSIS HERE IF TRUE SET THE ALARM 
                     //SOIL MOISTURE 
